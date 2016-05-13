@@ -6,6 +6,7 @@ from pyramid.config import Configurator
 from helloworld import hello_world
 
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-P', '--port', help='specify the port to run on')
@@ -17,5 +18,6 @@ if __name__ == '__main__':
     config.add_route('hi', '/hi/{iname}/{age}')
     config.add_view(hello_world, route_name='hi')
     app = config.make_wsgi_app()
+    print 'Running application on port %d' % p
     server = make_server('0.0.0.0', p, app)
     server.serve_forever()
