@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Training</title>
+    <link rel="shortcut icon" type="image/png" href="ang_fav.png"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+</head>
+<body>
+
+<script>
+    var app = angular.module("myApp", []);
+    app.controller('myCtrl', function($scope) {
+            $scope.tableHeaders = [{'slNo': 'slNO', 'name':'Name', 'age':'Age', 'gender':'Gender', 'action': 'Action'}]
+            $scope.details = []
+            $scope.add = function(){
+                $scope.details.push({'name': $scope.name, 'age': $scope.age, 'gender': $scope.gender})
+            };
+            $scope.remove = function(index){
+                $scope.details.splice(index, 1)
+            }
+            });
+
+</script>
+<div data-ng-app="myApp" data-ng-controller="myCtrl">
+<p>
+    Name: <input type="text" data-ng-model="name" placeHolder="Enter your Name" required><br>
+    Age: <input type="text" data-ng-model="age" placeHolder="Enter your Age" required><br>
+    Gender: <input type="radio" data-ng-model="gender" value="male" checked> Male
+    <input type="radio" data-ng-model="gender" value="female"> Female
+    <input type="radio" data-ng-model="gender" value="NA">Don't wish to disclose<br>
+    <button data-ng-click="add()">Add</button>
+
+</p>
+    <table>
+    <thead>
+        <tr data-ng-repeat="c in tableHeaders">
+             <th> {{ c.slNo }} </th>
+             <th> {{ c.name }} </th>
+             <th> {{ c.age }} </th>
+             <th> {{ c.gender }} </th>
+             <th> {{ c.action }} </th>
+        </tr>
+        </thead>
+        <tr data-ng-repeat="x in details">
+            <td> {{ $index }}</td>
+            <td> {{ x.name }}</td>
+            <td> {{ x.age }}</td>
+            <td> {{ x.gender }}</td>
+            <td> <button data-ng-click="remove($index)">Remove</button></td>
+        </tr>
+    </table>
+    </div>
+</body>
+</html>

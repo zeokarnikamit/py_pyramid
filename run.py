@@ -3,8 +3,7 @@ __author__ = "karnikamit"
 import argparse
 from wsgiref.simple_server import make_server
 from pyramid.config import Configurator
-from helloworld import hello_world
-
+from pyramidAngular import home
 
 
 if __name__ == '__main__':
@@ -15,9 +14,9 @@ if __name__ == '__main__':
     if args.port:
         p = int(args.port)
     config = Configurator()
-    config.add_route('hi', '/hi/{iname}/{age}')
-    config.add_view(hello_world, route_name='hi')
+    config.add_route('home', '/')
+    config.add_view(home, route_name='home')
     app = config.make_wsgi_app()
     print 'Running application on port %d' % p
-    server = make_server('0.0.0.0', p, app)
+    server = make_server('localhost', p, app)
     server.serve_forever()
