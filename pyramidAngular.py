@@ -15,4 +15,3 @@ def hello_world(request):
     name = request.matchdict['iname']
     age = int(request.matchdict['age'])
     return Response('Hello %dyrs old %s' % (age, name))
-
