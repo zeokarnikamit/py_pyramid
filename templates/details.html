@@ -97,7 +97,9 @@
             });
 
 </script>
-<div data-ng-app="myApp" data-ng-controller="myCtrl">
+<div data-ng-app="myApp" data-ng-controller="myCtrl" align="center" style="border:1px black">
+    <fieldset data-ng-hide="show">
+        <legend>Details:</legend>
 <p data-ng-hide="show">
     Name: <input type="text" data-ng-model="name" placeHolder="a-z | A-Z">
     AGE: <select data-ng-model="age">
@@ -110,9 +112,9 @@
     <input type="radio" data-ng-model="gender" value="NA">Don't wish to disclose<br>
 
     <button data-ng-click="add()">Add</button>
-
+</fieldset>
 </p>
-    <table>
+    <table align="center" border="1">
     <thead data-ng-show="details.length">
              <th> slNo </th>
              <th> Name </th>
@@ -133,8 +135,10 @@
         </tr>
         <td data-ng-show="details.length"> <button data-ng-click="edit(editRow)">Edit</button></td>
     </table>
+    <fieldset data-ng-show="show">
+        <legend>Update:</legend>
     <p data-ng-show="show">
-        Name: <input type="text" data-ng-model="uname" value="" placeholder="a-z | A-Z"><br/>
+        Name: <input type="text" data-ng-model="uname" value="" placeholder="a-z | A-Z">
         AGE: <select data-ng-model="uage">
                 <option  data-ng-repeat="a in ageArray" value="{{a}}">{{a}}</option>
              </select><br/>
@@ -145,6 +149,7 @@
         <button data-ng-click="update()">Update</button>
 
     </p>
+        </fieldset>
     </div>
 </body>
 </html>
