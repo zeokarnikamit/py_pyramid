@@ -24,7 +24,6 @@
             $scope.notInMobiles = function(mobNo){
                 for (var i=0; i<$scope.mobiles.length; i++){
                     if($scope.mobiles[i] == mobNo){
-                        alert('MobileNumber already exists!')
                         return false
                     }
                 }
@@ -32,11 +31,13 @@
             };
             $scope.add = function(){
                 if(validate($scope.name, $scope.mobile)){
-                    if ($scope.notInMobiles($scope.mobile)){
                     $scope.mobiles.push($scope.mobile);
-                    $scope.details.push({'name': $scope.name, 'age': $scope.age, 'gender': $scope.gender, 'mobile': $scope.mobile})
+                    $scope.details.push({'name': $scope.name, 'age': $scope.age, 'gender': $scope.gender, 'mobile': $scope.mobile});
+                    $scope.name = null;
+                    $scope.age = null;
+                    $scope.gender = null;
+                    $scope.mobile = null;
                     $scope.show=false
-                    }
                 }
             };
             $scope.remove = function(index){
@@ -47,19 +48,29 @@
                 $scope.index = index
             };
             $scope.update = function (){
-                index = $scope.indices.pop()
+                index = $scope.index
+                if (index < $scope.mobiles.length){
+                    mob_index = $scope.mobiles.indexOf($scope.mobiles[index]);
+                }
+                $scope.mobiles.splice(mob_index,1)
                 if (validate($scope.uname, $scope.umobile)){
                     $scope.details[index].name = $scope.uname;
                     $scope.details[index].age = $scope.uage;
                     $scope.details[index].gender = $scope.ugender;
                     $scope.details[index].mobile = $scope.umobile;
-                    $scope.show = false
+                    $scope.mobiles.push($scope.umobile);
+                    $scope.uname = null;
+                    $scope.uage = null;
+                    $scope.ugender = null;
+                    $scope.umobile = null;
+                    $scope.show = false;
+                    $scope.editRow = null;
                 }
 
             };
             $scope.getIndex = function(index){
                 $scope.show = true
-                $scope.indices.push(index);
+                $scope.index = index;
             };
 
             function validate(name, number){
@@ -68,10 +79,16 @@
                 var reName = new RegExp("^([a-zA-Z]{3,})$");
                 reNumber = new RegExp("^([0-9]{10,10})$");
                 if (reName.test(name) && reNumber.test(number)){
-                    valid = true;
-                    }else{
-                        validationMessage = "Name or Mobile Error OR Both!";
+                    if ($scope.notInMobiles(number)){
+                        valid = true;
                     }
+                    else{
+                        validationMessage = "Mobile Number already exists!";
+                    }
+                }
+                else{
+                    validationMessage = "Name or MobileNumber Error OR Both!";
+                }
                 if (!valid){
                     alert(validationMessage);
                 }
@@ -114,11 +131,11 @@
             <td> <button data-ng-click="remove($index)">Remove</button></td>
             <td><input type="checkbox" data-ng-model="editRow" data-ng-change="getIndex($index)" value=""><br></td>
         </tr>
-        <td> <button data-ng-click="edit(editRow)">Edit</button></td>
+        <td data-ng-show="details.length"> <button data-ng-click="edit(editRow)">Edit</button></td>
     </table>
     <p data-ng-show="show">
         Name: <input type="text" data-ng-model="uname" value="" placeholder="a-z | A-Z"><br/>
-        AGE: <select data-ng-model="age">
+        AGE: <select data-ng-model="uage">
                 <option  data-ng-repeat="a in ageArray" value="{{a}}">{{a}}</option>
              </select><br/>
         Mobile: <input type="text" data-ng-model="umobile" placeholder="10 numbers"><br/>
