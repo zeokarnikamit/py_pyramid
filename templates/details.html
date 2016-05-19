@@ -32,22 +32,25 @@
             $scope.add = function(){
                 if(validate($scope.name, $scope.mobile)){
                     $scope.mobiles.push($scope.mobile);
-                    $scope.details.push({'name': $scope.name, 'age': $scope.age, 'gender': $scope.gender, 'mobile': $scope.mobile});
+                    $scope.details.push({'name': $scope.name, 'age': $scope.age, 'gender': $scope.gender, 'mobile': $scope.mobile, 'editRow': false});
                     $scope.name = null;
                     $scope.age = null;
                     $scope.gender = null;
                     $scope.mobile = null;
                     $scope.show=false
+
                 }
             };
             $scope.remove = function(index){
                 $scope.details.splice(index, 1)
             };
-            $scope.edit = function(index){
-                $scope.show = true
-                $scope.index = index
+            $scope.edit = function(){
+                if ($scope.index || $scope.index == 0){
+                    $scope.show = true;
+                    }
             };
             $scope.update = function (){
+                document.getElementById("checkbox").checked = false;
                 index = $scope.index
                 if (index < $scope.mobiles.length){
                     mob_index = $scope.mobiles.indexOf($scope.mobiles[index]);
@@ -58,21 +61,25 @@
                     $scope.details[index].age = $scope.uage;
                     $scope.details[index].gender = $scope.ugender;
                     $scope.details[index].mobile = $scope.umobile;
+                    $scope.details[index].editRow = false;
                     $scope.mobiles.push($scope.umobile);
+                    $scope.index = null;
                     $scope.uname = null;
                     $scope.uage = null;
                     $scope.ugender = null;
                     $scope.umobile = null;
                     $scope.show = false;
-                    $scope.editRow = null;
                 }
-
             };
             $scope.getIndex = function(index){
-                $scope.show = true
-                $scope.index = index;
+                var uncheck = $scope.details[index].editRow
+                if (uncheck){
+                    $scope.index = index;
+                    }
+                else{
+                    $scope.index = null;
+                    }
             };
-
             function validate(name, number){
                 var valid = false;
                 var validationMessage = null;
@@ -115,7 +122,7 @@
 </fieldset>
 </p>
     <table align="center" border="1">
-    <thead data-ng-show="details.length">
+        <thead data-ng-show="details.length">
              <th> slNo </th>
              <th> Name </th>
              <th> Age </th>
@@ -131,9 +138,9 @@
             <td> {{ x.gender }}</td>
             <td> {{ x.mobile }}</td>
             <td> <button data-ng-click="remove($index)">Remove</button></td>
-            <td><input type="checkbox" data-ng-model="editRow" data-ng-change="getIndex($index)" value=""><br></td>
+            <td><input type="checkbox" id="checkbox" data-ng-model="x.editRow" data-ng-change="getIndex($index)" value=""><br></td>
         </tr>
-        <td data-ng-show="details.length"> <button data-ng-click="edit(editRow)">Edit</button></td>
+        <td data-ng-show="details.length"> <button data-ng-click="edit()">Edit</button></td>
     </table>
     <fieldset data-ng-show="show">
         <legend>Update:</legend>
