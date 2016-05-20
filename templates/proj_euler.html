@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Problem to solve</title>
+    <link rel="shortcut icon" type="image/png" href="templates/ang_fav.png"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+
+<script>
+    var mainApp = angular.module('mainApp', []);
+    mainApp.controller('getPeProblem', function($http, $scope){
+    $scope.responseData = null;
+    $scope.get = function(){
+        $http.get('http://127.0.0.1:5000/'+$scope.problem).then(function(response){
+            if (response.status == 200){
+                $scope.responseData = response.data;
+            };
+            });
+        };
+
+    });
+
+</script>
+<body>
+<div data-ng-app="mainApp" data-ng-controller="getPeProblem">
+<p><b>Project Euler</b></p>
+Request Problem 1-500: <input type="text" data-ng-model="problem" value="">
+    <p id="pe"></p>
+<button type="button" data-ng-click="get()">GET</button><br/>
+    <p> {{ responseData }}</p>
+    </div>
+</body>
+</html>

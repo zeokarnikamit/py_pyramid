@@ -5,73 +5,73 @@
     <title>Training</title>
     <link rel="shortcut icon" type="image/png" href="templates/ang_fav.png"/>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-
 </head>
 <body>
 
 <script>
     var app = angular.module("myApp", []);
     app.controller('myCtrl', function($scope) {
-            $scope.details = [];
-            $scope.show = false;
-            $scope.item = null;
-            $scope.indices = []
-            $scope.ageArray = []
-            for (var i=10; i < 31; i++){
-                    $scope.ageArray.push(i)
+        $scope.details = [];
+        $scope.show = false;
+        $scope.item = null;
+        $scope.indices = []
+        $scope.ageArray = []
+        for (var i=10; i < 31; i++){
+                $scope.ageArray.push(i)
+        }
+        $scope.mobiles = []
+        $scope.notInMobiles = function(mobNo){
+            for (var i=0; i<$scope.mobiles.length; i++){
+                if($scope.mobiles[i] == mobNo){
+                    return false
                 }
-            $scope.mobiles = []
-            $scope.notInMobiles = function(mobNo){
-                for (var i=0; i<$scope.mobiles.length; i++){
-                    if($scope.mobiles[i] == mobNo){
-                        return false
-                    }
-                }
-                return true
-            };
-            $scope.add = function(){
-                if(validate($scope.name, $scope.mobile)){
-                    $scope.mobiles.push($scope.mobile);
-                    $scope.details.push({'name': $scope.name, 'age': $scope.age, 'gender': $scope.gender, 'mobile': $scope.mobile, 'editRow': false});
-                    $scope.name = null;
-                    $scope.age = null;
-                    $scope.gender = null;
-                    $scope.mobile = null;
-                    $scope.show=false
+            }
+            return true
+        };
+        $scope.add = function(){
+            if(validate($scope.name, $scope.mobile)){
+                $scope.mobiles.push($scope.mobile);
+                $scope.details.push({'name': $scope.name, 'age': $scope.age, 'gender': $scope.gender, 'mobile': $scope.mobile, 'editRow': false});
+                $scope.name = null;
+                $scope.age = null;
+                $scope.gender = null;
+                $scope.mobile = null;
+                $scope.show=false
 
+            }
+        };
+        $scope.remove = function(index){
+            $scope.details.splice(index, 1)
+        };
+        $scope.edit = function(){
+            if ($scope.index || $scope.index == 0){
+                $scope.show = true;
                 }
-            };
-            $scope.remove = function(index){
-                $scope.details.splice(index, 1)
-            };
-            $scope.edit = function(){
-                if ($scope.index || $scope.index == 0){
-                    $scope.show = true;
-                    }
-            };
-            $scope.update = function (){
-                document.getElementById("checkbox").checked = false;
-                index = $scope.index
-                if (index < $scope.mobiles.length){
-                    mob_index = $scope.mobiles.indexOf($scope.mobiles[index]);
-                }
-                $scope.mobiles.splice(mob_index,1)
-                if (validate($scope.uname, $scope.umobile)){
-                    $scope.details[index].name = $scope.uname;
-                    $scope.details[index].age = $scope.uage;
-                    $scope.details[index].gender = $scope.ugender;
-                    $scope.details[index].mobile = $scope.umobile;
-                    $scope.details[index].editRow = false;
-                    $scope.mobiles.push($scope.umobile);
-                    $scope.index = null;
-                    $scope.uname = null;
-                    $scope.uage = null;
-                    $scope.ugender = null;
-                    $scope.umobile = null;
-                    $scope.show = false;
-                }
-            };
-            $scope.getIndex = function(index){
+        };
+        $scope.update = function (){
+            document.getElementById("checkbox").checked = false;
+            index = $scope.index
+            if (index < $scope.mobiles.length){
+                mob_index = $scope.mobiles.indexOf($scope.mobiles[index]);
+            }
+            $scope.mobiles.splice(mob_index,1)
+            if (validate($scope.uname, $scope.umobile)){
+                $scope.details[index].name = $scope.uname;
+                $scope.details[index].age = $scope.uage;
+                $scope.details[index].gender = $scope.ugender;
+                $scope.details[index].mobile = $scope.umobile;
+                $scope.details[index].editRow = false;
+                $scope.mobiles.push($scope.umobile);
+                $scope.index = null;
+                $scope.uname = null;
+                $scope.uage = null;
+                $scope.ugender = null;
+                $scope.umobile = null;
+                $scope.show = false;
+            }
+        };
+        $scope.getIndex = function(index){
+            if($scope.index == null){
                 var uncheck = $scope.details[index].editRow
                 if (uncheck){
                     $scope.index = index;
@@ -79,29 +79,30 @@
                 else{
                     $scope.index = null;
                     }
-            };
-            function validate(name, number){
-                var valid = false;
-                var validationMessage = null;
-                var reName = new RegExp("^([a-zA-Z]{3,})$");
-                reNumber = new RegExp("^([0-9]{10,10})$");
-                if (reName.test(name) && reNumber.test(number)){
-                    if ($scope.notInMobiles(number)){
-                        valid = true;
-                    }
-                    else{
-                        validationMessage = "Mobile Number already exists!";
-                    }
+            }
+        };
+        function validate(name, number){
+            var valid = false;
+            var validationMessage = null;
+            var reName = new RegExp("^([a-zA-Z]{3,})$");
+            reNumber = new RegExp("^([0-9]{10,10})$");
+            if (reName.test(name) && reNumber.test(number)){
+                if ($scope.notInMobiles(number)){
+                    valid = true;
                 }
                 else{
-                    validationMessage = "Name or MobileNumber Error OR Both!";
+                    validationMessage = "Mobile Number already exists!";
                 }
-                if (!valid){
-                    alert(validationMessage);
-                }
-                return valid;
-            };
-            });
+            }
+            else{
+                validationMessage = "Name or MobileNumber Error OR Both!";
+            }
+            if (!valid){
+                alert(validationMessage);
+            }
+            return valid;
+        };
+    });
 
 </script>
 <div data-ng-app="myApp" data-ng-controller="myCtrl" align="center" style="border:1px black">
@@ -113,7 +114,7 @@
         <option  data-ng-repeat="a in ageArray" value="{{a}}">{{a}}</option>
         </select><br/>
     <!--AGE: <input type="text" data-ng-model="age" placeholder="Enter your mobile number"><br/>-->
-    Mobile: <input type="text" data-ng-model="mobile" placeholder="10 numbers"><br/>
+    Mobile: <input type="text" data-ng-model="mobile" placeholder="10 numbers only"><br/>
     Gender: <input type="radio" data-ng-model="gender" value="Male" checked> Male
     <input type="radio" data-ng-model="gender" value="Female"> Female
     <input type="radio" data-ng-model="gender" value="NA">Don't wish to disclose<br>
@@ -138,23 +139,23 @@
             <td> {{ x.gender }}</td>
             <td> {{ x.mobile }}</td>
             <td> <button data-ng-click="remove($index)">Remove</button></td>
-            <td><input type="checkbox" id="checkbox" data-ng-model="x.editRow" data-ng-change="getIndex($index)" value=""><br></td>
+            <!--<td><input type="checkbox" id="checkbox" data-ng-model="x.editRow" data-ng-change="getIndex($index)" value=""><br></td>-->
+            <td><input type="radio" id="checkbox" data-ng-model="x.editRow" data-ng-change="getIndex($index)" value="true"><br></td>
         </tr>
         <td data-ng-show="details.length"> <button data-ng-click="edit()">Edit</button></td>
     </table>
     <fieldset data-ng-show="show">
         <legend>Update:</legend>
-    <p data-ng-show="show">
+    <p>
         Name: <input type="text" data-ng-model="uname" value="" placeholder="a-z | A-Z">
         AGE: <select data-ng-model="uage">
                 <option  data-ng-repeat="a in ageArray" value="{{a}}">{{a}}</option>
              </select><br/>
-        Mobile: <input type="text" data-ng-model="umobile" placeholder="10 numbers"><br/>
+        Mobile: <input type="text" data-ng-model="umobile" placeholder="10 numbers only"><br/>
         Gender:<input type="radio" data-ng-model="ugender" value="Male"> Male
         <input type="radio" data-ng-model="ugender" value="Female"> Female
         <input type="radio" data-ng-model="ugender" value="NA">Don't wish to disclose<br>
         <button data-ng-click="update()">Update</button>
-
     </p>
         </fieldset>
     </div>
