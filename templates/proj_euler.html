@@ -11,10 +11,14 @@
     var mainApp = angular.module('mainApp', []);
     mainApp.controller('getPeProblem', function($http, $scope){
     $scope.responseData = null;
+    $scope.prob = '';
     $scope.get = function(){
         $http.get('http://127.0.0.1:5000/'+$scope.problem).then(function(response){
             if (response.status == 200){
                 $scope.responseData = response.data;
+                for (i=0;i< $scope.responseData.data.length; i++){
+                    $scope.prob += $scope.responseData.data[i]
+                }
             };
             });
         };
@@ -28,7 +32,7 @@
 Request Problem 1-500: <input type="text" data-ng-model="problem" value="">
     <p id="pe"></p>
 <button type="button" data-ng-click="get()">GET</button><br/>
-    <p> {{ responseData }}</p>
+    <p> {{ prob }}</p>
     </div>
 </body>
 </html>

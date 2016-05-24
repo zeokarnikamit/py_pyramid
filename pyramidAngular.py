@@ -7,6 +7,8 @@ import requests
 import urllib3
 from bs4 import BeautifulSoup
 import json
+from pyramid.view import view_config
+
 
 def home(request):
     path = os.path.abspath('templates/details.html')
@@ -20,21 +22,25 @@ def problems(request):
     return resp
 
 
+@view_config(renderer='json')
 def get_page(request):
-    http = urllib3.PoolManager()
-    page = request.matchdict['ipage']
-    url = 'https://projecteuler.net/problem=' + str(page)
-    resp = http.request('GET', url)
     data = {"response": "failure"}
-    if resp.status == 200:
-        soup = BeautifulSoup(resp.data, 'html.parser')
-        result_set = soup.find(role='problem').find_all('p')
-        res_list = []
-        for i in result_set:
-            res_list.append(i.text)
-        data['data'] = res_list
-        data['response'] = 'success'
-    return json.dumps(data)
+    try:
+        http = urllib3.PoolManager()
+        page = request.matchdict['ipage']
+        url = 'https://projecteuler.net/problem=' + str(page)
+        resp = http.request('GET', url)
+        if resp.status == 200:
+            soup = BeautifulSoup(resp.data, 'html.parser')
+            result_set = soup.find(role='problem').find_all('p')
+            res_list = []
+            for i in result_set:
+                res_list.append(i.text)
+            data['data'] = res_list
+            data['response'] = 'success'
+    except Exception, e:
+        data['Error'] = e
+    return data
 
 
 def hello_world(request):
